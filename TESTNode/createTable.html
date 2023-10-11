@@ -1,0 +1,104 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Create Table</title>
+</head>
+<body>
+  <h1>Create a Table</h1>
+  <form  onsubmit="func(event)">
+    <div>
+      <label for="tableName">Table Name:</label>
+      <!-- <input type="text" id="tableName" name="tableName" required>  -->
+    </div>
+    <div>
+      <label for="fieldName">Field Name:</label>
+      <input type="text" id="fieldName" name="fieldName" required>
+    </div>
+    <div>
+      <label for="fieldType">Field Type:</label>
+      <select id="fieldType" name="fieldType" required>
+        <option>STRING</option>
+        <option>INTEGER</option>
+        <option>DOUBLE</option>
+        <option>JSON</option>
+        <option>BOOLEAN</option>
+      </select>
+
+    </div>
+    <!-- <div id="field-list"></div>
+    <button type="button" id="add-field">Add More Fields</button>
+    <br>-->
+    <div>
+      <button type="submit">Create Table</button>
+    </div> 
+    <ul id="list"></ul>
+  </form>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
+  <script>
+    // document.getElementById('add-field').addEventListener('click', function() {
+    //   const fieldRow = document.createElement('div');
+    //   fieldRow.className = 'field-row';
+    //   fieldRow.innerHTML = `
+    //     <label for="field-name">Field Name:</label>
+    //     <input type="text" name="field-name" required>
+    //     <label for="field-type">Field Type:</label>
+    //     <select id="field-type" name="field-type" required>
+    //     <option>STRING</option>
+    //     <option>INTEGER</option>
+    //     <option>DOUBLE</option>
+    //     <option>JSON</option>
+    //     <option>BOOLEAN</option>
+    //   </select>
+    //   `;
+    //   document.getElementById('field-list').appendChild(fieldRow);
+    // });
+      function func(event){
+      event.preventDefault()
+      //const tableName = document.getElementById('fieldName').value
+        const fieldName = document.getElementById('fieldName').value
+        const fieldType = document.getElementById('fieldType').value
+        console.log(fieldName+' hello ' + fieldType)
+
+        const obj = {
+          fieldName,
+          fieldType
+        }
+        console.log(obj)
+        const add = axios.post('http://localhost:7000/createTable', obj)
+        .then(result=>{
+          console.log('in post axios')
+          
+          display(result.data)
+        })
+        .catch(err=>console.log(err))
+     }
+     function display(obj){
+    
+      window.location.href = 'http://localhost:3000/tables'
+      console.log('in display')
+      const parent = document.getElementById('list')
+            const li = document.createElement('li')
+            li.textContent = obj.fieldName+' - - - '+obj.fieldType
+            
+            const editbtn = document.createElement('input')
+            editbtn.type='button'
+            editbtn.value='Edit Expense'
+
+            const deletebtn = document.createElement('input')
+            deletebtn.type='button'
+            deletebtn.value='Delete Expense'
+
+            li.appendChild(editbtn)
+            li.append('      ')
+            li.appendChild(deletebtn)
+
+            parent.appendChild(li)
+
+     }
+    
+    </script>
+    
+</body>
+</html>
